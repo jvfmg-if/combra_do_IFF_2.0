@@ -421,14 +421,16 @@ def caixa_texto(txt, caixa, ativo, surface, funcao):
   surface.blit(funcao, (caixa.x, caixa.y - 13))
 
 usuario = "Insira seu nome"
-senha_txt = "Insira sua senha"
+senha_txt = "Insira sua senha. Obs.: Segure CTRL para ver a senha"
 entrar = 'ENTRAR'
 txt1 = ''
 txt2 = ''
+txt22 = ''
 log_in = "LOGIN"
 ativo1 = False
 ativo2 = False
 cima_botao = False
+b = False
 
 tela = True
 while tela:
@@ -448,7 +450,7 @@ while tela:
   tela_login.blit(login, (228,200))
   tela_login.blit(entre, (257, botao_entrar.y + 12))
   caixa_texto(txt1, caixa1, ativo1, tela_login, usuario)
-  caixa_texto(txt2, caixa2, ativo2, tela_login, senha_txt)
+  caixa_texto(txt22, caixa2, ativo2, tela_login, senha_txt)
   
   screen.blit(tela_login,(0,0))
   
@@ -478,6 +480,7 @@ while tela:
         ativo1 = False
         ativo2 = True
         txt2 = ""
+        txt22 = ""
       else:
         ativo1 = False
         ativo2 = False
@@ -500,17 +503,34 @@ while tela:
           pass
         else:
           txt1 += event.unicode
-      
+          
           
       if ativo2:
-        if event.key == pygame.K_BACKSPACE:
-          txt2 = txt2[:-1]
+        if event.key == pygame.K_BACKSPACE and not b:
+            txt2 = txt2[:-1]
+            x = len(txt2)
+            txt22 = '*'*x
         elif event.key == pygame.K_RETURN:
-          ativo2 = False
+            ativo2 = False
         elif event.key == pygame.K_TAB:
-          pass
-        else:
-          txt2 += event.unicode
+            pass
+        elif event.key == pygame.K_LCTRL:
+            txt22 = txt2
+            b = True
+        elif not b:
+            txt2 += event.unicode
+            x = len(txt2)
+            txt22 = '*'*x
+            
+        elif event.key == pygame.K_LCTRL:
+            txt22 = txt2
+            b = True
+            
+    elif event.type == pygame.KEYUP:
+        if event.key == pygame.K_LCTRL:
+            txt22 = '*'*x
+            b = False
+        
   linhas_varredura(tela_login)
   pygame.display.update()
 
@@ -519,11 +539,11 @@ with open("atual.txt", "r") as archive:
   nome, senha, inuteis = linha.split(",")
   atual.append((nome, senha))
 
-pygame.mixer.music.load("elevator.wav")
+pygame.mixer.music.load("elevator.mp3")
 pygame.mixer.music.play(-1)
 #Loop principal do jogo
 while True:
-  """teste = pygame.mixer.Sound("elevator.wav")
+  """teste = pygame.mixer.Sound("elevator.mp3")
   if contador%124000==0:
     teste.play()
     teste.set_volume(0.7)"""
