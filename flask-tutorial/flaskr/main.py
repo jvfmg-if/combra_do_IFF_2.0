@@ -292,10 +292,12 @@ def aumentar():
 def quadriculado():
   screen.fill(WHITE)
   for y in range(0, 600,80):
+    pygame.draw.line(tela_login, BLACK,(300,600),(300,0),3)
     for x in range(0,600,80):
       screen.blit(chao,(x,y))
     for x in range(40,600,80):
       screen.blit(chao,(x,y+40))
+    
 
 
 #Posicoes buracos
@@ -459,10 +461,10 @@ while tela:
 
   entre = fonte.render(entrar, False, WHITE)
   login = fonte_placar.render(log_in, False, BLACK)
-  signup = fonte_placar.render(sign_up, False, WHITE)
-  tela_login.blit(login, (228,200))
-  tela_login.blit(entre, (257, botao_entrar.y + 12))
-  tela_login.blit(signup, (257, botao_link.y + 12))
+  signup = fonte.render(sign_up, False, WHITE)
+  tela_login.blit(login, (242,200))
+  tela_login.blit(entre, (260, botao_entrar.y + 9))
+  tela_login.blit(signup, (260, botao_link.y + 7))
   caixa_texto(txt1, caixa1, ativo1, tela_login, usuario)
   caixa_texto(txt22, caixa2, ativo2, tela_login, senha_txt)
   
