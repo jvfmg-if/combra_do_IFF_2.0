@@ -486,7 +486,8 @@ while tela:
               with open("atual.txt", "w") as x:                                  
                 x.write(f"{txt1},{txt2},")                                           
                 tela = False                                                        
-
+      elif botao_link.collidepoint(event.pos):
+        print("semen")
     if event.type == pygame.MOUSEBUTTONDOWN:
       if caixa1.collidepoint(event.pos):
         ativo1 = True
