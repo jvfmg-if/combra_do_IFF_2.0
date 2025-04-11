@@ -7,9 +7,13 @@
 import pygame,sys,random
 from pygame import display
 from pygame.constants import MOUSEWHEEL
+import webbrowser
 
 # Inicializa o Pygame
 pygame.init()
+
+#link
+url = "https://www.google.com"
 
 # Define as dimensões da tela (600x600)
 screen = pygame.display.set_mode((600, 600))
@@ -24,6 +28,7 @@ BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 GREEN2 = (67, 146, 55)
 RED = (255, 0, 0)
+BLUE = (0,0,255)
 
 #Tela
 pygame.display.set_caption("Snake")
@@ -61,13 +66,13 @@ pode_comecar = False
 tam = 40
 
 #Cobra
-inicial = [(240,200), (240,240), (240, 280)]
+inicial = [(280,200), (280,240), (280, 280)]
 snake_pos = inicial
 cobra = pygame.image.load("cobra.png")
 velocidade = 120
 
 #Maçã
-apple_pos = ((240, 160))
+apple_pos = ((280, 160))
 apple_pos2 = apple_pos2 = (random.randint(0, 14) * tam, random.randint(0, 14) * tam)
 apple = pygame.image.load("pontoss.png")
 
@@ -359,7 +364,7 @@ def paredes():
 
 #Verificação dos botões
 def botoes(botao, event, estado):
-  global estado_sair, estado_play, estado_placar, click, estado_creditos
+  global estado_sair, estado_play, estado_placar, click, estado_creditos, estado_link
 
   mouse_pos = pygame.mouse.get_pos()
 
@@ -427,6 +432,7 @@ txt1 = ''
 txt2 = ''
 txt22 = ''
 log_in = "LOGIN"
+sign_up = "SIGN UP"
 ativo1 = False
 ativo2 = False
 cima_botao = False
@@ -437,9 +443,15 @@ while tela:
   caixa1 = pygame.Rect(150,300, 300, 40)
   caixa2 = pygame.Rect(150,360, 300, 40)
   botao_entrar = pygame.Rect(150,420, 300, 40)
+  botao_link= pygame.Rect(150,470,300,40)
   tela_login = pygame.Surface((600,600))
   tela_login.fill(WHITE)
   mouse_pos = pygame.mouse.get_pos()
+  if botao_link.collidepoint(mouse_pos):
+    pygame.draw.rect(tela_login, (128,128,128), botao_link)
+  else:
+    pygame.draw.rect(tela_login, (169,169,169), botao_link)
+    
   if botao_entrar.collidepoint(mouse_pos):
     pygame.draw.rect(tela_login, (128,128,128), botao_entrar)
   else:
@@ -447,8 +459,10 @@ while tela:
 
   entre = fonte.render(entrar, False, WHITE)
   login = fonte_placar.render(log_in, False, BLACK)
+  signup = fonte_placar.render(sign_up, False, WHITE)
   tela_login.blit(login, (228,200))
   tela_login.blit(entre, (257, botao_entrar.y + 12))
+  tela_login.blit(signup, (257, botao_link.y + 12))
   caixa_texto(txt1, caixa1, ativo1, tela_login, usuario)
   caixa_texto(txt22, caixa2, ativo2, tela_login, senha_txt)
   
@@ -690,7 +704,8 @@ while True:
 
   pode_clicar = True
 
-  #Desenha os botoes se estiver no menu     
+  #Desenha os botoes se estiver no menu
+  
   if not pode_comecar and pode_botoes_menu:
     screen.blit(botao_play[estado_play],(200,360))
     screen.blit(botao_placar[estado_placar],(200,400))
@@ -889,3 +904,4 @@ while True:
   pygame.time.delay(velocidade)
   clock.tick(fps)
   contador+=fps
+
