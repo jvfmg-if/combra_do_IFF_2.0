@@ -599,6 +599,7 @@ while True:
       if clicou_play:
         pode_comecar = True
         jogo_comecou = True
+        velocidade = 120
 
       clicou_creditos, estado_creditos = botoes(pygame.Rect(200,440,botao_creditos[estado_creditos].get_width(),botao_creditos[estado_creditos].get_height()),event,estado_creditos)
 
