@@ -6,13 +6,17 @@
 
 #Se não funcionou, sinto-lhe informar, mas boa sorte.
 
-
+import db
+import auth 
+from main import jogo
 import os
 from flask import Flask, render_template
 import pygame
 import cv2
 #from db import get_db # se der merda apaga <---
 import sqlite3
+import threading
+import time
 
 def create_app(test_config=None):
     # create and configure the app
@@ -111,9 +115,29 @@ def create_app(test_config=None):
 
 
 
-    from . import db
     db.init_app(app)
-    from . import auth
+    
     app.register_blueprint(auth.bp)
 
     return app
+
+def run_flask():
+    app = create_app()
+    app.run(debug=True, use_reloader=False, threaded=True)
+
+
+# Create a thread for Flask to run separately
+flask_thread = threading.Thread(target=run_flask)
+
+# Start the Flask thread
+flask_thread.start()
+
+# Run the Pygame game in the main thread
+jogo()
+
+time.sleep(2)  # Give Flask a second to fully initialize
+os.system('curl -X POST http://127.0.0.1:5000/shutdown')
+
+# Ensure the Flask thread stops after the game ends
+flask_thread.join()
+os.system("exit")
