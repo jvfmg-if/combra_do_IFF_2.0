@@ -450,12 +450,14 @@ log_in = "LOGIN"
 sign_up = "SIGN UP"
 ativo1 = False
 ativo2 = False
+ativo3 = False
+ativo4 = False
 cima_botao = False
 b = False
 
 tela = True
 def jogo():
-  global b, txt22, screen, aba_placar, aba_creditos, WHITE, BLACK, GREEN, GREEN2, RED, chao, up, right, left, down, stop, my_direction, old_direction, clock, fps, contador, cima, direita, esquerda, baixo, carinha, qual, pode_comecar, tam, inicial, snake_pos, cobra, velocidade, apple_pos, apple_pos2, apple, buraco, parede, cantos, pontos, otão_play, estado_play, botao_placar, estado_placar, botao_sair, estado_sair, botao_menu, estado_menu, botao_creditos, estado_creditos, jogo_comecou, pausado, old_direction_guardado, allmapa, allwall, morreu, pode_clicar, menu_morte, pode_botoes_menu, click_caminho, mapa, wall, ps, inuteis, nome, senha, p, atual, y_creditos, superficie, xx, yy, scroll, dados, usuario, senha_txt, entrar, txt1, txt2, log_in, ativo1, ativo2, cima_botao, tela
+  global ativo4, ativo3, b, txt22, screen, aba_placar, aba_creditos, WHITE, BLACK, GREEN, GREEN2, RED, chao, up, right, left, down, stop, my_direction, old_direction, clock, fps, contador, cima, direita, esquerda, baixo, carinha, qual, pode_comecar, tam, inicial, snake_pos, cobra, velocidade, apple_pos, apple_pos2, apple, buraco, parede, cantos, pontos, otão_play, estado_play, botao_placar, estado_placar, botao_sair, estado_sair, botao_menu, estado_menu, botao_creditos, estado_creditos, jogo_comecou, pausado, old_direction_guardado, allmapa, allwall, morreu, pode_clicar, menu_morte, pode_botoes_menu, click_caminho, mapa, wall, ps, inuteis, nome, senha, p, atual, y_creditos, superficie, xx, yy, scroll, dados, usuario, senha_txt, entrar, txt1, txt2, log_in, ativo1, ativo2, cima_botao, tela
 
   # Inicializa o Pygame
   pygame.init()
@@ -482,13 +484,15 @@ def jogo():
     tela_login = pygame.Surface((600,600))
     tela_login.fill(WHITE)
     mouse_pos = pygame.mouse.get_pos()
-    if botao_link.collidepoint(mouse_pos):
+    if botao_link.collidepoint(mouse_pos) or ativo4:
       pygame.draw.rect(tela_login, (128,128,128), botao_link)
+      #ativo4 = True
     else:
       pygame.draw.rect(tela_login, (169,169,169), botao_link)
       
-    if botao_entrar.collidepoint(mouse_pos):
+    if botao_entrar.collidepoint(mouse_pos) or ativo3:
       pygame.draw.rect(tela_login, (128,128,128), botao_entrar)
+      #ativo3 = True
     else:
       pygame.draw.rect(tela_login, (169,169,169), botao_entrar)
 
@@ -508,32 +512,38 @@ def jogo():
         pygame.quit()
         sys.exit()
 
-      if event.type == pygame.MOUSEBUTTONUP:
-        if botao_entrar.collidepoint(event.pos):
-          with open("jogadores.txt", "r") as arquivo:
-            linhas = arquivo.readlines()
-            for i in linhas:
-              nome_play, senhas_play, inuteis = i.split(",")
+      if event.type == pygame.MOUSEBUTTONUP and botao_entrar.collidepoint(event.pos) or event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and ativo3 == True:
+        with open("jogadores.txt", "r") as arquivo:
+          linhas = arquivo.readlines()
+          for i in linhas:
+            nome_play, senhas_play, inuteis = i.split(",")
 
-              if nome_play == txt1 and senhas_play == txt2 and txt1 != '' and txt2 != "":
-                with open("atual.txt", "w") as x:                                  
-                  x.write(f"{txt1},{txt2},")                                           
-                  tela = False                                                        
-        elif botao_link.collidepoint(event.pos):
-          webbrowser.open_new_tab(url)
+            if nome_play == txt1 and senhas_play == txt2 and txt1 != '' and txt2 != "":
+              with open("atual.txt", "w") as x:                                  
+                x.write(f"{txt1},{txt2},")                                           
+                tela = False                                                        
+      elif event.type == pygame.MOUSEBUTTONUP and botao_link.collidepoint(event.pos) or event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and ativo4 == True:
+        webbrowser.open_new_tab(url)
+
       if event.type == pygame.MOUSEBUTTONDOWN:
         if caixa1.collidepoint(event.pos):
           ativo1 = True
           ativo2 = False
+          ativo3 = False
+          ativo4 = False
           txt1 = ""
         elif caixa2.collidepoint(event.pos):
           ativo1 = False
           ativo2 = True
+          ativo3 = False
+          ativo4 = False
           txt2 = ""
           txt22 = ""
         else:
           ativo1 = False
           ativo2 = False
+          ativo3 = False
+          ativo4 = False
 
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_TAB:
@@ -542,6 +552,12 @@ def jogo():
             ativo2 = True
           elif ativo2:
             ativo2 = False
+            ativo3 = True
+          elif ativo3:
+            ativo3 = False
+            ativo4 = True
+          elif ativo4:
+            ativo4 = False
             ativo1 = True
             
         if ativo1:
@@ -575,7 +591,7 @@ def jogo():
           elif event.key == pygame.K_LCTRL:
               txt22 = txt2
               b = True
-              
+                
       elif event.type == pygame.KEYUP:
           if event.key == pygame.K_LCTRL:
               txt22 = '*'*x
