@@ -19,7 +19,7 @@ def chdir_bom(caminho):
 
 working_directory = os.getcwd()
 print(working_directory)
-working_directory = chdir_bom(fr"{working_directory}/flask-tutorial/flask-tutorial/flaskr")
+working_directory = chdir_bom(fr"{working_directory}/flask-tutorial/flaskr")
 print(working_directory)
 
 
