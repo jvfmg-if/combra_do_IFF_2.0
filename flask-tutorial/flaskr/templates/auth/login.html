@@ -1,7 +1,9 @@
+<!--commit 2-->
+
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
+  <h1 class="login__name">{% block title %}Log In{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,6 +12,6 @@
     <input name="username" id="username" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
+    <input type="submit" value="Log In" class="button">
   </form>
 {% endblock %}
