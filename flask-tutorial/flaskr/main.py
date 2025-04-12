@@ -209,7 +209,7 @@ def reinicializar(msg_morte):
     snake_pos = [(240,200), (240,240), (240, 280)]
     pode_comecar = False
     pode_botoes_menu = False
-    screen.blit(msg_morte, (78,195))
+    screen.blit(msg_morte, msg_morte.get_rect(centerx=(600//2), top=(195)))
     atual[0] = (atual[0][0], atual[0][1], pontos)
 
     if not menu_morte:
@@ -470,7 +470,7 @@ def jogo():
   fonte_placar = pygame.font.SysFont("Arial", 44)
   msg_play_formatado = fonte.render("Play",False,WHITE)
   msg_placar_formatado = fonte.render("Placar",False,WHITE)
-  msg_sair_formatado = arial.render("Sair  ",False,WHITE)
+  msg_sair_formatado = arial.render("Sair",False,WHITE)
   aperte_iniciar = fonte.render('Aperte a tecla W ou a Seta para Cima para iniciar',False,GREEN2)
   msg_menu = fonte.render("Main menu",False,WHITE)
   msg_morte = fonteGO.render("Game-Over",False,WHITE)
@@ -766,25 +766,25 @@ def jogo():
       screen.blit(botao_sair[estado_sair],(200, 480))
 
       if estado_creditos == 0 or estado_creditos == 1:
-        screen.blit(msg_creditos_formatado,(263,446))
+        screen.blit(msg_creditos_formatado,msg_creditos_formatado.get_rect(centerx=(600//2), top=(446)))
 
       elif estado_creditos == 2:
-        screen.blit(msg_creditos_formatado,(263,448))
+        screen.blit(msg_creditos_formatado,msg_creditos_formatado.get_rect(centerx=(600//2), top=(448)))
 
       if estado_sair == 0 or estado_sair == 1:
-        screen.blit(msg_sair_formatado,(279,486))
+        screen.blit(msg_sair_formatado,msg_sair_formatado.get_rect(centerx=(600//2), top=(486)))
       elif estado_sair == 2:
-        screen.blit(msg_sair_formatado,(279,488))
+        screen.blit(msg_sair_formatado,msg_sair_formatado.get_rect(centerx=(600//2), top=(488)))
 
       if estado_play == 0 or estado_play == 1:
-        screen.blit(msg_play_formatado,(278,366))
+        screen.blit(msg_play_formatado,msg_play_formatado.get_rect(centerx=(600//2),top=(366)))
       elif estado_play == 2:
-        screen.blit(msg_play_formatado,(278,368))
+        screen.blit(msg_play_formatado,msg_play_formatado.get_rect(centerx=(600//2),top=(368)))
 
       if estado_placar == 0 or estado_placar == 1:
-        screen.blit(msg_placar_formatado,(268,406))
+        screen.blit(msg_placar_formatado,msg_placar_formatado.get_rect(centerx=(600//2),top=(406)))
       elif estado_placar == 2:
-        screen.blit(msg_placar_formatado,(268,408))
+        screen.blit(msg_placar_formatado,msg_placar_formatado.get_rect(centerx=(600//2),top=(408)))
 
     #Desenha a "F" enquanto a cobra estiver parada
     #if my_direction == stop and pausado == False:
@@ -844,7 +844,7 @@ def jogo():
 
 
     if pode_comecar and my_direction == stop and pausado != True:
-      screen.blit(aperte_iniciar,(65,371))
+      screen.blit(aperte_iniciar,aperte_iniciar.get_rect(centerx=(600//2),top=(371)))
 
     if my_direction != stop:
       jogo_comecou = True
@@ -867,17 +867,19 @@ def jogo():
       screen.blit(botao_sair[estado_sair],(200, 400))
 
       if estado_sair == 0 or estado_sair == 1:
-        screen.blit(msg_sair_formatado,(279,406))
+        screen.blit(msg_sair_formatado, msg_sair_formatado.get_rect(centerx=(600//2), top=(406)))
       elif estado_sair == 2:
-        screen.blit(msg_sair_formatado,(279,408))
+        screen.blit(msg_sair_formatado,msg_placar_formatado.get_rect(centerx=(600//2),top=(408)))
 
     if menu_morte:
       screen.blit(botao_menu[estado_menu], (200, 360))
 
       if estado_menu == 0 or estado_menu == 1:
-        screen.blit(msg_menu,(242,366))
+        #screen.blit(msg_menu,(242,366))
+        screen.blit(msg_menu,msg_menu.get_rect(centerx=(600//2), top=(366)))
       elif estado_menu == 2:
-        screen.blit(msg_menu,(242,368))
+        #screen.blit(msg_menu,(242,368))
+        screen.blit(msg_menu,msg_menu.get_rect(centerx=(600//2), top=(368)))
     if aba_creditos:
       preto_transparente = pygame.Surface((600,3000))
   #adicionar creditos
