@@ -10,13 +10,15 @@ import db
 import auth 
 from main import jogo
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pygame
 import cv2
 #from db import get_db # se der merda apaga <---
 import sqlite3
 import threading
 import time
+import werkzeug
+from werkzeug.serving import run_simple
 
 def create_app(test_config=None):
     # create and configure the app
@@ -39,6 +41,12 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    @app.route('/shutdown', methods=['POST'])
+    def shutdown():
+
+        server_type = os.environ.get('SERVER_SOFTWARE', 'Desconhecido')
+        print(f"Servidor Flask está rodando com: {server_type}")
+        os._exit(0)
 
     # a simple page that says hello
     @app.route('/hello')
@@ -99,7 +107,7 @@ def create_app(test_config=None):
 
     def get_db():
     # Conecta ao banco de dados SQLite
-        conn = sqlite3.connect('instance/flaskr.sqlite')
+        conn = sqlite3.connect('instance/flaskr.sqlite',check_same_thread=True)
         conn.row_factory = sqlite3.Row  # Para acessar os dados como dicionários
         return conn
 
@@ -123,6 +131,7 @@ def create_app(test_config=None):
 
 def run_flask():
     app = create_app()
+    #run_simple('127.0.0.1', 5000, app, use_reloader=False, threaded=True)
     app.run(debug=True, use_reloader=False, threaded=True)
 
 
