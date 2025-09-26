@@ -1,0 +1,6 @@
+opencv-python
+pygame
+os-sys
+click
+flask
+requests

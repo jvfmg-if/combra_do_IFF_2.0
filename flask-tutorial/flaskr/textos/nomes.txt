@@ -1,0 +1,8 @@
+UFC,UFC,1600000000,
+jvfmg,123,26,
+teste,teste,22,
+jvfmg23,jvfmg,19,
+c,d,18,
+qweasd,qweasd,7,
+123,123,6,
+aaaa,bbbb,3,
