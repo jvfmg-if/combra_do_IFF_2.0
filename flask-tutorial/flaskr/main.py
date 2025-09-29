@@ -13,6 +13,7 @@ import time
 import copy
 from time import sleep
 import requests
+
 def chdir_bom(caminho):
 
   os.chdir(caminho)
@@ -174,6 +175,12 @@ estado_menu = 0
 botao_creditos = [pygame.image.load("menu/botao_padrao.png"), pygame.image.load("menu/mouse_em_cima.png"), pygame.image.load("menu/botao_clique.png")]
 estado_creditos = 0
 
+#escudos
+escudo_2x = pygame.image.load("escudos/2x.png")
+escudo_haste = pygame.image.load("escudos/haste.png")
+escudo_invertido = pygame.image.load("escudos/invertido.png")
+escudo_reviver = pygame.image.load("escudos/reviver.png")
+
 #Verificações
 jogo_comecou = False
 pausado = False
@@ -290,7 +297,7 @@ def aumentar():
   p = pontos
 
   if snake_pos[0] == apple_pos:
-    aleatorio = random.randint(0, 7)
+    aleatorio = random.randint(0, 5)
     chance = 1
     haste_chance = 2
 
@@ -365,7 +372,7 @@ def aumentar():
     momento_haste = time.time()
 
   if snake_pos[0] == apple_pos2:
-    aleatorio_ = random.randint(0, 7)
+    aleatorio_ = random.randint(0, 5)
     chance_ = 1
     chance_inverted = 2
 
@@ -579,6 +586,42 @@ def caixa_texto(txt, caixa, ativo, surface, funcao):
   funcao = fonte_menor.render(funcao, False, BLACK)
   surface.blit(txt, (caixa.x + 5, caixa.y + 12))
   surface.blit(funcao, (caixa.x, caixa.y - 13))
+
+def posicao_escudos():
+    global double_point_active, haste_active, inverted_active, escudo_reviver
+    
+    efeitos = [double_point_active, haste_active, inverted_active, escudo_reviver]
+    pos_escudos = [(40,40), (60,40), (80,40), (100,40)]
+    
+    resultado = []
+    pos_index = 0
+    
+    for efeito in efeitos:
+        if efeito:
+            resultado.append(pos_escudos[pos_index])
+            pos_index += 1  
+    
+    return resultado
+
+
+
+def escudos_draw():
+    global double_point_active, haste_active, inverted_active, escudo_2x, escudo_haste, escudo_invertido, escudo_reviver
+
+    efeitos = [double_point_active, haste_active, inverted_active, return_ativado]
+    sprites = [escudo_2x, escudo_haste, escudo_invertido, escudo_reviver]
+    posicoes = posicao_escudos()  
+    tempo = pygame.time.get_ticks()
+    piscar = (tempo // 300) % 2 == 0
+
+    pos_index = 0
+    for efeito, sprite in zip(efeitos, sprites):
+        if efeito:
+            if piscar:
+                screen.blit(sprite, posicoes[pos_index])
+            pos_index += 1
+
+
 
 usuario = "Insira seu nome"
 senha_txt = "Insira sua senha. Obs.: Segure CTRL para ver a senha"
@@ -1176,6 +1219,7 @@ def jogo():
 
     if my_direction != stop:
       screen.blit(msg_pontos,(447,50))
+      escudos_draw()
 
     linhas_varredura(screen)
     #Atualiza a tela
