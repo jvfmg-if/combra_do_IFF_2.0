@@ -727,6 +727,17 @@ def jogo():
                   tela = False                                                        
         elif botao_link.collidepoint(event.pos):
           webbrowser.open_new_tab(url)
+      elif event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_RETURN: 
+          with open("textos/jogadores.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+            for i in linhas:
+              nome_play, senhas_play, inuteis = i.split(",")
+
+              if nome_play == txt1 and senhas_play == txt2 and txt1 != '' and txt2 != "":
+                with open("textos/atual.txt", "w") as x:                                  
+                  x.write(f"{txt1},{txt2},")                                           
+                  tela = False
       if event.type == pygame.MOUSEBUTTONDOWN:
         if caixa1.collidepoint(event.pos):
           ativo1 = True
