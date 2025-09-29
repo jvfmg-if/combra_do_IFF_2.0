@@ -181,7 +181,14 @@ escudo_haste = pygame.image.load("escudos/haste.png")
 escudo_invertido = pygame.image.load("escudos/invertido.png")
 escudo_reviver = pygame.image.load("escudos/reviver.png")
 
+#piscar escudos
+piscar_double_point = False
+piscar_haste = False
+piscar_inverted = False
+
+
 #Verificações
+ultimo_aviso = 0
 jogo_comecou = False
 pausado = False
 old_direction_guardado = False
@@ -241,8 +248,9 @@ def linhas_varredura(tela):
   screen.blit(tela_por_cima, (0, 0))
 
 def reinicializar(msg_morte):
-  global double_point, inverted, inverted_active, haste, haste_active, double_point_active, apple_pos2, especial, cobra_save, pontos_save, apple_pos2_save, apple_pos_save, my_direction_save, jogo_comecou, old_direction_guardado, snake_pos, apple_pos, velocidade, qual, pode_comecar, my_direction, old_direction, morreu, pontos, menu_morte, pode_botoes_menu, jogo_comecou, pausado, aba_placar, pode_botoes_menu
+  global ultimo_aviso, double_point, inverted, inverted_active, haste, haste_active, double_point_active, apple_pos2, especial, cobra_save, pontos_save, apple_pos2_save, apple_pos_save, my_direction_save, jogo_comecou, old_direction_guardado, snake_pos, apple_pos, velocidade, qual, pode_comecar, my_direction, old_direction, morreu, pontos, menu_morte, pode_botoes_menu, jogo_comecou, pausado, aba_placar, pode_botoes_menu
   if morreu:
+    ultimo_aviso = 0
     preto_transparente = pygame.Surface((600,600))
     preto_transparente.set_alpha(225)
     screen.blit(preto_transparente,(0,0))
@@ -292,7 +300,7 @@ def cronometro(tempo, momento):
 
 #Aumenta a quantidade de casas da Snake
 def aumentar():
-  global inverted, momento_inverted, inverted_active, inverted_pos, momento_haste,haste, haste_pos, haste_active, momento, gold_pos, double_point, double_point_active, qual_save, qual, special_pos, apple_pos, apple_pos2, snake_pos, pontos, velocidade, especial, cobra_save, apple_pos2_save, apple_pos_save, pontos_save, my_direction_save, return_ativado
+  global ultimo_aviso,inverted, momento_inverted, inverted_active, inverted_pos, momento_haste,haste, haste_pos, haste_active, momento, gold_pos, double_point, double_point_active, qual_save, qual, special_pos, apple_pos, apple_pos2, snake_pos, pontos, velocidade, especial, cobra_save, apple_pos2_save, apple_pos_save, pontos_save, my_direction_save, return_ativado
 
   p = pontos
 
@@ -325,9 +333,13 @@ def aumentar():
 
     if pontos == p + 1:
       velocidade -= 1
-    if pontos%20==0:
+    
+    
+    while (ultimo_aviso + 1) * 20 <= pontos:
       aviso=pygame.mixer.Sound("sons/aviso.mp3")
       aviso.play()
+      ultimo_aviso += 1
+    
 
     if velocidade < 30:
       velocidade = 30
@@ -606,20 +618,27 @@ def posicao_escudos():
 
 
 def escudos_draw():
-    global double_point_active, haste_active, inverted_active, escudo_2x, escudo_haste, escudo_invertido, escudo_reviver
+    global piscar_double_point, piscar_haste, piscar_inverted
+    global double_point_active, haste_active, inverted_active, return_ativado
+    global escudo_2x, escudo_haste, escudo_invertido, escudo_reviver
 
     efeitos = [double_point_active, haste_active, inverted_active, return_ativado]
     sprites = [escudo_2x, escudo_haste, escudo_invertido, escudo_reviver]
+    piscar_flags = [piscar_double_point, piscar_haste, piscar_inverted, False]  # o último sempre pode piscar
     posicoes = posicao_escudos()  
     tempo = pygame.time.get_ticks()
-    piscar = (tempo // 300) % 2 == 0
+    piscar = (tempo // 200) % 2 == 0
 
     pos_index = 0
-    for efeito, sprite in zip(efeitos, sprites):
+    for efeito, sprite, pode_piscar in zip(efeitos, sprites, piscar_flags):
         if efeito:
-            if piscar:
-                screen.blit(sprite, posicoes[pos_index])
+            if pode_piscar:  # só pisca se permitido pela flag
+                if piscar:
+                    screen.blit(sprite, posicoes[pos_index])
+            else:
+                screen.blit(sprite, posicoes[pos_index])  # sempre desenha se não pode piscar
             pos_index += 1
+
 
 
 
@@ -636,9 +655,10 @@ ativo2 = False
 cima_botao = False
 b = False
 
+
 tela = True
 def jogo():
-  global momento_inverted, inverted, inverted_active, apple_inverted, inverted_pos, haste, haste_active, haste_duration, apple_haste, haste_pos, double_point_active, double_point_duration, momento, gold_pos, apple_gold, pause, special_pos, especial, apple_pos2_save, return_ativado, apple_pos_save, cobra_save, pontos_save, my_direction_save, ativo4, ativo3, b, txt22, screen, aba_placar, aba_creditos, WHITE, BLACK, GREEN, GREEN2, RED, chao, up, right, left, down, stop, my_direction, old_direction, clock, fps, contador, cima, direita, esquerda, baixo, carinha, qual, pode_comecar, tam, inicial, snake_pos, cobra, velocidade, apple_pos, apple_pos2, apple, buraco, parede, cantos, pontos, otão_play, estado_play, botao_placar, estado_placar, botao_sair, estado_sair, botao_menu, estado_menu, botao_creditos, estado_creditos, jogo_comecou, pausado, old_direction_guardado, allmapa, allwall, morreu, pode_clicar, menu_morte, pode_botoes_menu, click_caminho, mapa, wall, ps, inuteis, nome, senha, p, atual, y_creditos, superficie, xx, yy, scroll, dados, usuario, senha_txt, entrar, txt1, txt2, log_in, ativo1, ativo2, cima_botao, tela
+  global piscar_double_point, piscar_haste, piscar_inverted, momento_inverted, inverted, inverted_active, apple_inverted, inverted_pos, haste, haste_active, haste_duration, apple_haste, haste_pos, double_point_active, double_point_duration, momento, gold_pos, apple_gold, pause, special_pos, especial, apple_pos2_save, return_ativado, apple_pos_save, cobra_save, pontos_save, my_direction_save, ativo4, ativo3, b, txt22, screen, aba_placar, aba_creditos, WHITE, BLACK, GREEN, GREEN2, RED, chao, up, right, left, down, stop, my_direction, old_direction, clock, fps, contador, cima, direita, esquerda, baixo, carinha, qual, pode_comecar, tam, inicial, snake_pos, cobra, velocidade, apple_pos, apple_pos2, apple, buraco, parede, cantos, pontos, otão_play, estado_play, botao_placar, estado_placar, botao_sair, estado_sair, botao_menu, estado_menu, botao_creditos, estado_creditos, jogo_comecou, pausado, old_direction_guardado, allmapa, allwall, morreu, pode_clicar, menu_morte, pode_botoes_menu, click_caminho, mapa, wall, ps, inuteis, nome, senha, p, atual, y_creditos, superficie, xx, yy, scroll, dados, usuario, senha_txt, entrar, txt1, txt2, log_in, ativo1, ativo2, cima_botao, tela
 
   # Inicializa o Pygame
   pygame.init()
@@ -1055,6 +1075,12 @@ def jogo():
     else:
       pass
     aumentar()
+
+    piscar_double_point = double_point_active and (time.time() >= momento + double_point_duration - 1.15)
+    piscar_haste        = haste_active and (time.time() >= momento_haste + haste_duration - 1.15)
+    piscar_inverted     = inverted_active and (time.time() >= momento_inverted + inverted_duration - 1.15)
+
+
     if double_point_active and time.time() - momento >= double_point_duration:
       double_point_active = False
       print("acabou")
