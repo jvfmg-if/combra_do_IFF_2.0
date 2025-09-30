@@ -860,6 +860,11 @@ def jogo():
 
       if menu_morte:
         clicou_menu, estado_menu = botoes(pygame.Rect(200,360,botao_menu[estado_menu].get_width(), botao_menu[estado_menu].get_height()), event, estado_menu)
+        
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_SPACE:
+            menu_morte = False
+
         if clicou_menu:
           menu_morte = False
 
@@ -895,6 +900,12 @@ def jogo():
           pode_comecar = True
           jogo_comecou = True
           velocidade = 120
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+              pode_comecar = True
+              jogo_comecou = True
+              velocidade = 120
+
 
         clicou_creditos, estado_creditos = botoes(pygame.Rect(200,440,botao_creditos[estado_creditos].get_width(),botao_creditos[estado_creditos].get_height()),event,estado_creditos)
 
