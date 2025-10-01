@@ -649,7 +649,7 @@ txt1 = ''
 txt2 = ''
 txt22 = ''
 log_in = "LOGIN"
-sign_up = "SIGN UP"
+sign_up = "REGISTER"
 ativo1 = False
 ativo2 = False
 cima_botao = False
@@ -716,28 +716,32 @@ def jogo():
 
       if event.type == pygame.MOUSEBUTTONUP:
         if botao_entrar.collidepoint(event.pos):
-          with open("textos/jogadores.txt", "r") as arquivo:
-            linhas = arquivo.readlines()
-            for i in linhas:
-              nome_play, senhas_play, inuteis = i.split(",")
-
-              if nome_play == txt1 and senhas_play == txt2 and txt1 != '' and txt2 != "":
-                with open("textos/atual.txt", "w") as x:                                  
-                  x.write(f"{txt1},{txt2},")                                           
-                  tela = False                                                        
+          try:
+            resp = requests.post('http://127.0.0.1:5000/auth/login', data={
+              'username': txt1,
+              'password': txt2
+            })
+            if resp.ok and ('Incorrect username' not in resp.text and 'Incorrect password' not in resp.text) and txt1 != '' and txt2 != "":
+              with open("textos/atual.txt", "w") as x:
+                x.write(f"{txt1},{txt2},")
+              tela = False
+          except Exception as e:
+            pass
         elif botao_link.collidepoint(event.pos):
           webbrowser.open_new_tab(url)
       elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RETURN: 
-          with open("textos/jogadores.txt", "r") as arquivo:
-            linhas = arquivo.readlines()
-            for i in linhas:
-              nome_play, senhas_play, inuteis = i.split(",")
-
-              if nome_play == txt1 and senhas_play == txt2 and txt1 != '' and txt2 != "":
-                with open("textos/atual.txt", "w") as x:                                  
-                  x.write(f"{txt1},{txt2},")                                           
-                  tela = False
+          try:
+            resp = requests.post('http://127.0.0.1:5000/auth/login', data={
+              'username': txt1,
+              'password': txt2
+            })
+            if resp.ok and ('Incorrect username' not in resp.text and 'Incorrect password' not in resp.text) and txt1 != '' and txt2 != "":
+              with open("textos/atual.txt", "w") as x:
+                x.write(f"{txt1},{txt2},")
+              tela = False
+          except Exception as e:
+            pass
       if event.type == pygame.MOUSEBUTTONDOWN:
         if caixa1.collidepoint(event.pos):
           ativo1 = True
