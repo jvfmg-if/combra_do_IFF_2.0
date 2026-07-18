@@ -27,7 +27,7 @@ def register():
         if error is None:
             
             try:
-                with open("flaskr/jogadores.txt","w") as arquivo:
+                with open("data/jogadores.txt","w") as arquivo:
                     arquivo.write(f"{username},{password},")
                 db.execute(
                     "INSERT INTO user (username, password) VALUES (?, ?)",

@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 import click
@@ -24,8 +25,9 @@ def close_db(e=None):
 def init_db():
     db = get_db()
 
-    with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+    schema_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'schema.sql')
+    with open(schema_path) as f:
+        db.executescript(f.read())
 
 
 @click.command('init-db')

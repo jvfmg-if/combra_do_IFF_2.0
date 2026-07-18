@@ -1,42 +1,43 @@
-#Rode esse arquivo normalmente, apenas o main.py é em terminal dedicado.
-#Instale as bibliotecas.
-#Para iniciar:
-
-#   - Abra o cmd e digite: flask --app flaskr init-db; depois digite: flask --app flaskr run --debug
-
-#Se não funcionou, sinto-lhe informar, mas boa sorte.
+# Para iniciar:
+#   Linux: ./run.sh
+#   Windows: run.bat
+# Ou manualmente: cd src && python __init__.py
 
 import db
 import auth 
 from main import jogo
 import os
+import sys
 from flask import Flask, render_template, request
 import pygame
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 #from db import get_db # se der merda apaga <---
 import sqlite3
 import threading
 import time
+import requests
 import werkzeug
 from werkzeug.serving import run_simple
 
 def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config['DATABASE'] = 'instance/flaskr.sqlite'  # Substitua pelo caminho correto# se der merda apaga <---
+    _root = os.path.dirname(os.path.abspath(__file__))
+    app = Flask(__name__,
+        instance_path=os.path.join(_root, '..', 'data', 'instance'),
+        template_folder=os.path.join(_root, '..', 'web', 'templates'),
+        static_folder=os.path.join(_root, '..', 'web', 'static'))
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        DATABASE=os.path.join(_root, '..', 'data', 'instance', 'flaskr.sqlite'),
     )
 
     if test_config is None:
-        # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
     else:
-        # load the test config if passed in
         app.config.from_mapping(test_config)
 
-    # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
     except OSError:
@@ -55,6 +56,8 @@ def create_app(test_config=None):
     
     @app.route('/easterEgg,wow!:o')
     def easteregg():
+        if cv2 is None:
+            return "OpenCV não disponível neste sistema."
         def play_video(video_path, audio_path):
             pygame.init()
             pygame.mixer.init()
@@ -74,7 +77,7 @@ def create_app(test_config=None):
 
                 cv2.imshow("Vídeo", frame)
 
-                if cv2.waitKey(25) & 0xFF == 27:  # Pressione ESC para sair
+                if cv2.waitKey(25) & 0xFF == 27:
                     break
 
             cap.release()
@@ -83,8 +86,10 @@ def create_app(test_config=None):
             cv2.destroyAllWindows()
 
         def main():
-            video_path = "C:/Users/ferre/OneDrive/Área de Trabalho/WTFhorse.mp4"
-            audio_path = "C:/Users/ferre/OneDrive/Área de Trabalho/WTFhorse.mp3"
+            video_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'sounds', "WTFhorse.mp4")
+            audio_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'sounds', "WTFhorse.mp3")
+            if not os.path.exists(video_path) or not os.path.exists(audio_path):
+                return "Vídeo não encontrado."
             play_video(video_path, audio_path)
         
         main()
@@ -106,9 +111,9 @@ def create_app(test_config=None):
 
 
     def get_db():
-    # Conecta ao banco de dados SQLite
-        conn = sqlite3.connect('instance/flaskr.sqlite',check_same_thread=True)
-        conn.row_factory = sqlite3.Row  # Para acessar os dados como dicionários
+        db_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'instance', 'flaskr.sqlite')
+        conn = sqlite3.connect(db_path, check_same_thread=True)
+        conn.row_factory = sqlite3.Row
         return conn
 
     @app.route('/bd')
@@ -144,9 +149,11 @@ flask_thread.start()
 # Run the Pygame game in the main thread
 jogo()
 
-time.sleep(2)  # Give Flask a second to fully initialize
-os.system('curl -X POST http://127.0.0.1:5000/shutdown')
+time.sleep(1)
+try:
+    requests.post('http://127.0.0.1:5000/shutdown', timeout=2)
+except requests.exceptions.RequestException:
+    pass
 
-# Ensure the Flask thread stops after the game ends
-flask_thread.join()
-os.system("exit")
+flask_thread.join(timeout=3)
+sys.exit(0)

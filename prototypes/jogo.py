@@ -17,7 +17,7 @@ GREEN = (0, 255, 0)
 
 def LerAtual():
     atual = []
-    with open("flaskr/atual.txt", "r") as archive:
+    with open("../data/atual.txt", "r") as archive:
         linha = archive.readline()
         nome, senha, inuteis = linha.split(",")
         atual.append((nome, senha))

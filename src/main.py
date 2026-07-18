@@ -1,6 +1,4 @@
-#Instale as bibliotecas
-#REGRA: use o comando cd flaskr pra essa pasta, aí ss vc inicia o código.
-#Rode em um terminal dedicado
+# Instale as bibliotecas: pip install -r requirements.txt
 
 
 
@@ -11,16 +9,8 @@ import webbrowser
 import os
 from time import sleep
 import requests
-def chdir_bom(caminho):
 
-  os.chdir(caminho)
-  return caminho
-
-
-working_directory = os.getcwd()
-print(working_directory)
-working_directory = chdir_bom(fr"{working_directory}/combra_do_IFF_2.0-Agr-vai/flask-tutorial/flaskr")
-print(working_directory)
+os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 
 def shutdown_flask():
@@ -53,7 +43,7 @@ pygame.display.set_caption("Snake")
 screen.fill(WHITE)
 
 #Chao da tela
-chao = pygame.image.load("chaodois.png")
+chao = pygame.image.load("assets/images/map/chaodois.png")
 #Direções
 up = 0
 right = 1
@@ -69,10 +59,10 @@ fps = 100
 contador=0
 
 #Carinhas da cobra
-cima = pygame.image.load("carinhas/cimaa.png")
-direita = pygame.image.load("carinhas/direitaa.png")
-esquerda = pygame.image.load("carinhas/esquerdaa.png")
-baixo = pygame.image.load("carinhas/baixoo.png")
+cima = pygame.image.load("assets/images/snake/carinhas/cimaa.png")
+direita = pygame.image.load("assets/images/snake/carinhas/direitaa.png")
+esquerda = pygame.image.load("assets/images/snake/carinhas/esquerdaa.png")
+baixo = pygame.image.load("assets/images/snake/carinhas/baixoo.png")
 
 carinha = [cima, direita, esquerda, baixo]
 qual = 0
@@ -86,24 +76,24 @@ tam = 40
 #Cobra
 inicial = [(280,200), (280,240), (280, 280)]
 snake_pos = inicial
-cobra = pygame.image.load("cobra.png")
+cobra = pygame.image.load("assets/images/snake/cobra.png")
 velocidade = 120
 
 #Maçã
 apple_pos = ((280, 160))
 apple_pos2 = apple_pos2 = (random.randint(0, 14) * tam, random.randint(0, 14) * tam)
-apple = pygame.image.load("pontoss.png")
+apple = pygame.image.load("assets/images/fx/pontoss.png")
 
 #Buraco
-buraco = pygame.image.load("buraco.png")
+buraco = pygame.image.load("assets/images/map/buraco.png")
 
 #Parede
-parede = pygame.image.load("paredeee.png")
+parede = pygame.image.load("assets/images/map/paredeee.png")
 cantos = [(0,0), (0,560), (560,560), (560,0)]
 
 #EFE
 #efe_pos = ((280, 160))
-#efe = pygame.image.load("EFE.png")
+#efe = pygame.image.load("assets/images/fx/EFE.png")
 
 #Pontos
 pontos = 0
@@ -125,15 +115,15 @@ msg_creditos_formatado=fonte.render("Credits",False,WHITE)'''
 
 
 #botões
-botao_play = [pygame.image.load("botao_padrao.png"), pygame.image.load("mouse_em_cima.png"), pygame.image.load("botao_clique.png")]
+botao_play = [pygame.image.load("assets/images/buttons/botao_padrao.png"), pygame.image.load("assets/images/buttons/mouse_em_cima.png"), pygame.image.load("assets/images/buttons/botao_clique.png")]
 estado_play = 0
-botao_placar = [pygame.image.load("botao_padrao.png"), pygame.image.load("mouse_em_cima.png"), pygame.image.load("botao_clique.png")]
+botao_placar = [pygame.image.load("assets/images/buttons/botao_padrao.png"), pygame.image.load("assets/images/buttons/mouse_em_cima.png"), pygame.image.load("assets/images/buttons/botao_clique.png")]
 estado_placar = 0
-botao_sair = [pygame.image.load("botao_padrao.png"), pygame.image.load("mouse_em_cima.png"), pygame.image.load("botao_clique.png")]
+botao_sair = [pygame.image.load("assets/images/buttons/botao_padrao.png"), pygame.image.load("assets/images/buttons/mouse_em_cima.png"), pygame.image.load("assets/images/buttons/botao_clique.png")]
 estado_sair = 0
-botao_menu = [pygame.image.load("botao_padrao.png"), pygame.image.load("mouse_em_cima.png"), pygame.image.load("botao_clique.png")]
+botao_menu = [pygame.image.load("assets/images/buttons/botao_padrao.png"), pygame.image.load("assets/images/buttons/mouse_em_cima.png"), pygame.image.load("assets/images/buttons/botao_clique.png")]
 estado_menu = 0
-botao_creditos = [pygame.image.load("botao_padrao.png"), pygame.image.load("mouse_em_cima.png"), pygame.image.load("botao_clique.png")]
+botao_creditos = [pygame.image.load("assets/images/buttons/botao_padrao.png"), pygame.image.load("assets/images/buttons/mouse_em_cima.png"), pygame.image.load("assets/images/buttons/botao_clique.png")]
 estado_creditos = 0
 
 #Verificações
@@ -149,7 +139,7 @@ pode_botoes_menu = True
 
 #Sons
 pygame.mixer.init()
-click_caminho = pygame.mixer.Sound("button-click.mp3")
+click_caminho = pygame.mixer.Sound("assets/sounds/button-click.mp3")
 
 #Buraco
 mapa = []
@@ -169,12 +159,12 @@ yy = 0
 scroll = 0
 dados = []
 
-"""with open("atual.txt", "r") as archive:
+"""with open("data/atual.txt", "r") as archive:
   linha = archive.readline()
   nome, senha, inuteis = linha.split(",")
   atual.append((nome, senha))"""
 
-with open("nomes.txt", "r") as arquivo:
+with open("data/nomes.txt", "r") as arquivo:
   linhas = arquivo.readlines()
   for i in linhas:
     nome, senha, p, inuteis = i.split(",") #Ian: Se der algum erro mais pra frente, saibam que a única mod. q fiz foi ter tirado uma variavel "p"     ^daqui
@@ -240,14 +230,14 @@ def aumentar():
   p = pontos
 
   if snake_pos[0] == apple_pos:
-    comer = pygame.mixer.Sound("comer.mp3")
+    comer = pygame.mixer.Sound("assets/sounds/comer.mp3")
     comer.play()
     snake_pos.append(snake_pos[-1])
     pontos += 1
     if pontos == p + 1:
       velocidade -= 1
     if pontos%20==0:
-      aviso=pygame.mixer.Sound("aviso.mp3")
+      aviso=pygame.mixer.Sound("assets/sounds/aviso.mp3")
       aviso.play()
 
     if velocidade < 30:
@@ -274,7 +264,7 @@ def aumentar():
       apple_pos2 = (random.randint(0, 14) * tam, random.randint(0, 14) * tam)
 
   if snake_pos[0] == apple_pos2:
-    comer = pygame.mixer.Sound("comer(02).mp3")
+    comer = pygame.mixer.Sound("assets/sounds/comer(02).mp3")
     comer.play()
     snake_pos.append(snake_pos[-1])
     pontos += 1
@@ -284,7 +274,7 @@ def aumentar():
     if velocidade < 30:
       velocidade = 30
     if pontos%20==0:
-      aviso=pygame.mixer.Sound("aviso.mp3")
+      aviso=pygame.mixer.Sound("assets/sounds/aviso.mp3")
       aviso.play()
 
     while True:
@@ -411,7 +401,7 @@ def colisao():
   head = snake_pos[0]
 
   if head in snake_pos[1:] or head in wall[0:]:
-    morte=pygame.mixer.Sound("morte.mp3")
+    morte=pygame.mixer.Sound("assets/sounds/morte.mp3")
     morte.play()
     morreu = True
     menu_morte = True
@@ -431,7 +421,7 @@ def colisao():
     dados.append((atual[0][0],atual[0][1],pontos))
     dados.sort(key=lambda x: x[2], reverse=True)
 
-    with open("nomes.txt", "w") as arquivo:
+    with open("data/nomes.txt", "w") as arquivo:
       for i in range(len(dados)):
         arquivo.write(f"{dados[i][0]},{dados[i][1]},{dados[i][2]},\n")
 
@@ -512,19 +502,17 @@ def jogo():
       if event.type == pygame.QUIT:
         pygame.quit()
         shutdown_flask()
-        os.system('curl -X POST http://127.0.0.1:5000/shutdown')
-        os.system("exit")
         sys.exit()
 
       if event.type == pygame.MOUSEBUTTONUP:
         if botao_entrar.collidepoint(event.pos):
-          with open("jogadores.txt", "r") as arquivo:
+          with open("data/jogadores.txt", "r") as arquivo:
             linhas = arquivo.readlines()
             for i in linhas:
               nome_play, senhas_play, inuteis = i.split(",")
 
               if nome_play == txt1 and senhas_play == txt2 and txt1 != '' and txt2 != "":
-                with open("atual.txt", "w") as x:                                  
+                with open("data/atual.txt", "w") as x:                                  
                   x.write(f"{txt1},{txt2},")                                           
                   tela = False                                                        
         elif botao_link.collidepoint(event.pos):
@@ -592,16 +580,16 @@ def jogo():
     linhas_varredura(tela_login)
     pygame.display.update()
 
-  with open("atual.txt", "r") as archive:
+  with open("data/atual.txt", "r") as archive:
     linha = archive.readline()
     nome, senha, inuteis = linha.split(",")
     atual.append((nome, senha))
 
-  pygame.mixer.music.load("elevator.mp3")
+  pygame.mixer.music.load("assets/sounds/elevator.mp3")
   pygame.mixer.music.play(-1)
   #Loop principal do jogo
   while True:
-    """teste = pygame.mixer.Sound("elevator.mp3")
+    """teste = pygame.mixer.Sound("assets/sounds/elevator.mp3")
     if contador%124000==0:
       teste.play()
       teste.set_volume(0.7)"""
@@ -641,9 +629,6 @@ def jogo():
             pygame.quit()
 
             shutdown_flask()
-            os.system('curl -X POST http://127.0.0.1:5000/shutdown')
-            os.system("exit")
-
             sys.exit()
 
         elif menu_morte:
@@ -651,8 +636,6 @@ def jogo():
           if clicou_sair:
             pygame.quit()
             shutdown_flask()
-            os.system('curl -X POST http://127.0.0.1:5000/shutdown')
-            os.system("exit")
             sys.exit()
 
       #Chama a verificação dos botões
@@ -676,8 +659,6 @@ def jogo():
       if event.type == pygame.QUIT:
         pygame.quit()
         shutdown_flask()
-        os.system('curl -X POST http://127.0.0.1:5000/shutdown')
-        os.system("exit")
         sys.exit()
 
       #Verifica se o usuario apertou alguma tecla
