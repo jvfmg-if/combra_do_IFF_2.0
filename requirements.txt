@@ -1,4 +1,4 @@
-pygame>=2.0
+pygame-ce>=2.5.8
 flask>=2.0
 opencv-python-headless
 requests
